@@ -8,9 +8,11 @@
 
 """
 
+
 # === Base constants === */
 
 # Four primitive qualities
+
 HOT = 'Hot'
 COLD = 'Cold'
 DRY = 'Dry'
@@ -49,6 +51,7 @@ MOON_SECOND_QUARTER = 'Second Quarter'
 MOON_THIRD_QUARTER = 'Third Quarter'
 MOON_LAST_QUARTER = 'Last Quarter'
 
+
 # === Signs === */
 
 ARIES = 'Aries'
@@ -81,6 +84,7 @@ SIGN_STERILE = 'Sterile'
 SIGN_MODERATELY_FERTILE = 'Moderately Fertile'
 SIGN_MODERATELY_STERILE = 'Moderately Sterile'
 
+
 # === Objects === */
 
 # Names
@@ -95,15 +99,15 @@ URANUS = 'Uranus'
 NEPTUNE = 'Neptune'
 PLUTO = 'Pluto'
 CHIRON = 'Chiron'
-NORTH_NODE = 'North Node'
-SOUTH_NODE = 'South Node'
+NORTH_NODE = 'Rahu'
+SOUTH_NODE = 'Ketu'
 SYZYGY = 'Syzygy'
 PARS_FORTUNA = 'Pars Fortuna'
 NO_PLANET = 'None'
 
 # Object movement
 DIRECT = 'Direct'
-RETROGRADE = 'Retrograde'
+RETROGRADE = 'Retrogade'
 STATIONARY = 'Stationary'
 
 # Mean daily motions
@@ -121,19 +125,49 @@ OBJ_LUNATION = 'Lunation'
 OBJ_GENERIC = 'Generic'
 
 # === Houses === */
+ASHWINI = 'Ashwini'
+BHARANI = 'Bharani'
+KRITTIKA = 'Krittika'
+ROHINI = 'Rohini'
+MRIGASIRA = 'Mrigashira'
+AARDRA ='Aardra'
+PUNARVASU ='Punarvasu'
+PUSHYA ='Pushya'
+ASHLESHA ='Ashlesha'
+MAGHA ='Magha'
+PURVAPHALGUNI ='Purva Phalguni'
+UTTARAPHALGUNI ='Uttara Phalguni'
+HASTA ='Hasta'
+CHITRA ='Chitra'
+SWATI ='Swati'
+VISHAKA ='Vishakha'
+ANURADHA ='Anuradha'
+JYESHTA ='Jyeshta'
+MULA ='Mula'
+PURVAASHADHA ='Purva Ashadha'
+UTTARAASHADHA ='Uttara Ashadha'
+SHRAVANA='Shravana'
+DHANISHTA ='Dhanishta'
+SHATABHISHA ='Shatabhisha'
+PURVABHADRAPADA ='Purva Bhadrapada'
+UTTARABHADRAPADA ='Uttara Bhadrapada'
+REVATI ='Revati'
 
-HOUSE1 = 'House1'
-HOUSE2 = 'House2'
-HOUSE3 = 'House3'
-HOUSE4 = 'House4'
-HOUSE5 = 'House5'
-HOUSE6 = 'House6'
-HOUSE7 = 'House7'
-HOUSE8 = 'House8'
-HOUSE9 = 'House9'
-HOUSE10 = 'House10'
-HOUSE11 = 'House11'
-HOUSE12 = 'House12'
+
+# === Houses === */
+
+HOUSE1 = 'House 1'
+HOUSE2 = 'House 2'
+HOUSE3 = 'House 3'
+HOUSE4 = 'House 4'
+HOUSE5 = 'House 5'
+HOUSE6 = 'House 6'
+HOUSE7 = 'House 7'
+HOUSE8 = 'House 8'
+HOUSE9 = 'House 9'
+HOUSE10 = 'House 10'
+HOUSE11 = 'House 11'
+HOUSE12 = 'House 12'
 
 # House conditions
 ANGULAR = 'Angular'
@@ -161,12 +195,14 @@ HOUSES_ALCABITUS = 'Alcabitus'
 HOUSES_MORINUS = 'Morinus'
 HOUSES_DEFAULT = HOUSES_ALCABITUS
 
+
 # === Angles === */
 
 ASC = 'Asc'
 DESC = 'Desc'
 MC = 'MC'
 IC = 'IC'
+
 
 # === Fixed Stars === */
 
@@ -207,6 +243,7 @@ STAR_FOMALHAUT = 'Fomalhaut'
 STAR_DENEB_ADIGE = 'Deneb'  # Alpha-Cygnus
 STAR_ACHERNAR = 'Achernar'
 
+
 # === Aspects === */
 
 # Major Aspects
@@ -234,7 +271,7 @@ EXACT = 'Exact'
 NO_MOVEMENT = 'None'
 
 # Aspect direction
-DEXTER = 'Dexter'  # Right side
+DEXTER = 'Dexter'      # Right side
 SINISTER = 'Sinister'  # Left side
 
 # Aspect properties
@@ -246,6 +283,19 @@ MAJOR_ASPECTS = [0, 60, 90, 120, 180]
 MINOR_ASPECTS = [30, 36, 45, 72, 108, 135, 144, 150]
 ALL_ASPECTS = MAJOR_ASPECTS + MINOR_ASPECTS
 
+
+# === Ayanamsas / Sidereal Zodiac === */
+
+AY_FAGAN_BRADLEY = "Ayanamsa Fagan Bradley"
+AY_LAHIRI = "Ayanamsa Lahiri"
+AY_DELUCE = "Ayanamsa De Luce"
+AY_RAMAN = "Ayanamsa Raman"
+AY_KRISHNAMURTI = "Ayanamsa Krishnamurti"
+AY_SASSANIAN = "Ayanamsa Sassanian"
+AY_ALDEBARAN_15TAU = "Ayanamsa Aldebaran 15 Taurus"
+AY_GALCENTER_5SAG = "Ayanamsa Galactic Eq. 05 Sag"
+
+
 # === Some Lists === */
 
 LIST_SIGNS = [
@@ -253,15 +303,21 @@ LIST_SIGNS = [
     SCORPIO, SAGITTARIUS, CAPRICORN, AQUARIUS, PISCES
 ]
 
+LIST_NAKSHATRAS = [
+    ASHWINI, BHARANI, KRITTIKA, ROHINI, MRIGASIRA, AARDRA, PUNARVASU, PUSHYA, ASHLESHA, 
+    MAGHA, PURVAPHALGUNI, UTTARAPHALGUNI, HASTA, CHITRA, SWATI, VISHAKA, ANURADHA, JYESHTA,
+    MULA, PURVAASHADHA, UTTARAASHADHA, SHRAVANA, DHANISHTA, SHATABHISHA, PURVABHADRAPADA, UTTARABHADRAPADA, REVATI
+    ]
+
 LIST_OBJECTS = [
-    SUN, MOON, MERCURY, VENUS, MARS, JUPITER, SATURN,
+    SUN, MOON, MERCURY, VENUS, MARS, JUPITER, SATURN, 
     URANUS, NEPTUNE, PLUTO, CHIRON, NORTH_NODE,
     SOUTH_NODE, SYZYGY, PARS_FORTUNA,
 ]
 
 LIST_OBJECTS_TRADITIONAL = [
     SUN, MOON, MERCURY, VENUS, MARS, JUPITER, SATURN,
-    NORTH_NODE, SOUTH_NODE, SYZYGY, PARS_FORTUNA
+    NORTH_NODE, SOUTH_NODE,
 ]
 
 LIST_SEVEN_PLANETS = [

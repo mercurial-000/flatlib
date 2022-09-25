@@ -17,9 +17,9 @@ from . import eph
 from . import swe
 
 from flatlib.datetime import Datetime
-from flatlib.object import (GenericObject, Object,
+from flatlib.object import (GenericObject, Object, 
                             House, FixedStar)
-from flatlib.lists import (GenericList, ObjectList,
+from flatlib.lists import (GenericList, ObjectList, 
                            HouseList, FixedStarList)
 
 
@@ -35,6 +35,41 @@ def getObjectList(IDs, date, pos):
     """ Returns a list of objects. """
     objList = [getObject(ID, date, pos) for ID in IDs]
     return ObjectList(objList)
+
+
+def get_object(obj, date, pos, alt=None, mode=None):
+    """
+    Returns an object for a specific date and location.
+    - If the altitude value is set, returns the topocentric position
+    - If mode is set, returns sidereal positions for the given mode
+
+    :param obj: the object
+    :param date: the date
+    :param pos: the geographical position
+    :param alt: the altitude above msl in meters
+    :param mode: the ayanamsa
+    :return: Object
+    """
+    obj_values = eph.get_object(obj, date.jd, pos.lat, pos.lon, alt, mode)
+    return Object.fromDict(obj_values)
+
+
+def get_objects(objs, date, pos, alt=None, mode=None):
+    """
+    Returns a list of object for a specific date and location.
+    - If the altitude value is set, returns the topocentric position
+    - If mode is set, returns sidereal positions for the given mode
+
+    :param ids: the ids of the objects
+    :param date: the date
+    :param pos: the geographical position
+    :param alt: the altitude above msl in meters
+    :param mode: the ayanamsa
+    :return: ObjectList
+    """
+
+    objects = [get_object(obj, date, pos, alt, mode) for obj in objs]
+    return ObjectList(objects)
 
 
 # === Houses and angles === #
@@ -62,13 +97,30 @@ def getAngleList(date, pos, hsys):
     return getHouses(date, pos, hsys)['angles']
 
 
+def get_houses(date, pos, hsys, mode=None):
+    """
+     Returns a list of house and angle cusps.
+    - If mode is set, returns sidereal positions for the given mode
+
+    :param date: the date
+    :param pos: the geographical position
+    :param hsys: the house system
+    :param mode: the ayanamsa
+    :return: list of houses and angles
+    """
+
+    houses, angles = eph.get_houses(date.jd, pos.lat, pos.lon, hsys, mode)
+    house_list = [House.fromDict(house) for house in houses]
+    angle_list = [GenericObject.fromDict(angle) for angle in angles]
+    return HouseList(house_list), GenericList(angle_list)
+
+
 # === Fixed stars === #
 
 def getFixedStar(ID, date):
     """ Returns a fixed star from the ephemeris. """
     star = eph.getFixedStar(ID, date.jd)
     return FixedStar.fromDict(star)
-
 
 def getFixedStarList(IDs, date):
     """ Returns a list of fixed stars. """
@@ -83,7 +135,6 @@ def nextSolarReturn(date, lon):
     jd = eph.nextSolarReturn(date.jd, lon)
     return Datetime.fromJD(jd, date.utcoffset)
 
-
 def prevSolarReturn(date, lon):
     """ Returns the previous date when sun is at longitude 'lon'. """
     jd = eph.prevSolarReturn(date.jd, lon)
@@ -97,18 +148,15 @@ def nextSunrise(date, pos):
     jd = eph.nextSunrise(date.jd, pos.lat, pos.lon)
     return Datetime.fromJD(jd, date.utcoffset)
 
-
 def nextSunset(date, pos):
     """ Returns the date of the next sunset. """
     jd = eph.nextSunset(date.jd, pos.lat, pos.lon)
     return Datetime.fromJD(jd, date.utcoffset)
 
-
 def lastSunrise(date, pos):
     """ Returns the date of the last sunrise. """
     jd = eph.lastSunrise(date.jd, pos.lat, pos.lon)
     return Datetime.fromJD(jd, date.utcoffset)
-
 
 def lastSunset(date, pos):
     """ Returns the date of the last sunset. """
@@ -135,7 +183,6 @@ def prevSolarEclipse(date):
     eclipse = swe.solarEclipseGlobal(date.jd, backward=True)
     return Datetime.fromJD(eclipse['maximum'], date.utcoffset)
 
-
 def nextSolarEclipse(date):
     """ Returns the Datetime of the maximum phase of the
     next global solar eclipse.
@@ -145,7 +192,6 @@ def nextSolarEclipse(date):
     eclipse = swe.solarEclipseGlobal(date.jd, backward=False)
     return Datetime.fromJD(eclipse['maximum'], date.utcoffset)
 
-
 def prevLunarEclipse(date):
     """ Returns the Datetime of the maximum phase of the
     previous global lunar eclipse.
@@ -154,7 +200,6 @@ def prevLunarEclipse(date):
 
     eclipse = swe.lunarEclipseGlobal(date.jd, backward=True)
     return Datetime.fromJD(eclipse['maximum'], date.utcoffset)
-
 
 def nextLunarEclipse(date):
     """ Returns the Datetime of the maximum phase of the

@@ -16,6 +16,7 @@ from . import swe
 from . import tools
 from flatlib import angle
 from flatlib import const
+from flatlib import props
 
 
 # === Objects === #
@@ -46,8 +47,12 @@ def getObject(ID, jd, lat, lon):
         obj['id'] = const.SYZYGY
     else:
         obj = swe.sweObject(ID, jd)
-
+    
     _signInfo(obj)
+    _signRulerInfo(obj)
+    _nakshatraInfo(obj)
+    _nakshatraRulerInfo(obj)
+
     return obj
 
 
@@ -78,28 +83,24 @@ def nextSolarReturn(jd, lon):
     """ Return the JD of the next solar return. """
     return tools.solarReturnJD(jd, lon, True)
 
-
 def prevSolarReturn(jd, lon):
     """ Returns the JD of the previous solar return. """
     return tools.solarReturnJD(jd, lon, False)
 
 
 # === Sunrise and sunsets === #
-
+    
 def nextSunrise(jd, lat, lon):
     """ Returns the JD of the next sunrise. """
     return swe.sweNextTransit(const.SUN, jd, lat, lon, 'RISE')
-
 
 def nextSunset(jd, lat, lon):
     """ Returns the JD of the next sunset. """
     return swe.sweNextTransit(const.SUN, jd, lat, lon, 'SET')
 
-
 def lastSunrise(jd, lat, lon):
     """ Returns the JD of the last sunrise. """
     return nextSunrise(jd - 1.0, lat, lon)
-
 
 def lastSunset(jd, lat, lon):
     """ Returns the JD of the last sunset. """
@@ -122,3 +123,101 @@ def _signInfo(obj):
         'sign': const.LIST_SIGNS[int(lon / 30)],
         'signlon': lon % 30
     })
+
+#added by me :D
+
+def _signRulerInfo(obj):
+    """ Appends the sign ruler to an object. """
+    sign = obj['sign']
+    signruler = props.object.signRuler[sign]
+    obj.update({
+        'signruler': signruler
+    })
+
+def _nakshatraInfo(obj):
+    """ Appends the nakshatra and its ruler to an object"""
+    lon = obj['lon']
+    obj.update({
+        'nakshatra': const.LIST_NAKSHATRAS[int(lon / 13.333333333333334)]
+    })
+
+
+def _nakshatraRulerInfo(obj):
+    """Appends the nakshatra ruler to an object"""
+    nak = obj['nakshatra']
+    ruler = props.object.nakshatraRuler[nak]
+    obj.update({
+        'nakshatraruler': ruler
+    })
+
+
+# === Objects and houses (sidereal and topocentric functions) === #
+
+def get_object(obj, jd, lat=None, lon=None, alt=None, mode=None):
+    """
+    Returns an object for a specific date and location.
+    - If lat/lon/alt values are set, it returns the topocentric position
+    - If mode is set, returns sidereal positions for the given mode
+
+    :param obj: the object
+    :param jd: the julian date
+    :param lat: the latitude in degrees
+    :param lon: the longitude in degrees
+    :param alt: the altitude above msl in meters
+    :param mode: the ayanamsa
+    :return: dictionary
+    """
+
+    if obj == const.SOUTH_NODE:
+        eph_obj = swe.swe_object(const.NORTH_NODE, jd, lat, lon, alt, mode)
+        eph_obj.update({
+            'id': const.SOUTH_NODE,
+            'lon': angle.norm(eph_obj['lon'] + 180)
+        })
+
+    elif obj == const.PARS_FORTUNA:
+        # TODO: tools.pfLon must compute sidereal/topocentric positions
+        pflon = tools.pfLon(jd, lat, lon)
+        eph_obj = {
+            'id': obj,
+            'lon': pflon,
+            'lat': 0,
+            'lonspeed': 0,
+            'latspeed': 0
+        }
+
+    elif obj == const.SYZYGY:
+        szjd = tools.syzygyJD(jd)
+        eph_obj = swe.swe_object(const.MOON, szjd, lat, lon, alt, mode)
+        eph_obj['id'] = const.SYZYGY
+
+    else:
+        eph_obj = swe.swe_object(obj, jd, lat, lon, alt, mode)
+
+    _signInfo(eph_obj)
+    _signRulerInfo(eph_obj)
+    _nakshatraInfo(eph_obj)
+    _nakshatraRulerInfo(eph_obj)
+    return eph_obj
+
+
+def get_houses(jd, lat, lon, hsys, mode=None):
+    """
+    Returns a list of house and angle cusps.
+    - If mode is set, returns sidereal positions for the given mode
+
+    :param jd: the julian date
+    :param lat: the latitude in degrees
+    :param lon: the longitude in degrees
+    :param hsys: the house system
+    :param mode: the ayanamsa
+    :return: list of houses and angles
+    """
+    houses, angles = swe.swe_houses(jd, lat, lon, hsys, mode)
+
+    for house in houses:
+        _signInfo(house)
+    for angle in angles:
+        _signInfo(angle)
+
+    return houses, angles

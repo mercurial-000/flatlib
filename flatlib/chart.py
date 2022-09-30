@@ -51,6 +51,7 @@ class Chart:
         self.date = date
         self.pos = pos
         self.hsys = hsys
+        self.mode = mode
         self.objects = ephem.get_objects(IDs, date, pos, mode=mode)
         self.houses, self.angles = ephem.get_houses(date, pos, hsys, mode=mode)
         
@@ -74,11 +75,19 @@ class Chart:
         for obj in self.angles:
             obj.relocate(obj.lon + offset)
 
-    def to_sidereal_zodiac(self, mode):
+    # def to_sidereal_zodiac(self, mode):
+    #     """Returns a copy of this chart on the sidereal zodiac."""
+    #     chart = self.copy()
+    #     offset = swe.get_ayanamsa(chart.date.jd, mode)
+    #     chart.move(-offset)
+    #     return chart
+
+    def to_tropical_zodiac(self):
         """Returns a copy of this chart on the sidereal zodiac."""
         chart = self.copy()
+        mode=self.mode
         offset = swe.get_ayanamsa(chart.date.jd, mode)
-        chart.move(-offset)
+        chart.move(offset)
         return chart
     
     # === Properties === #

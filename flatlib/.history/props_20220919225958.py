@@ -321,7 +321,7 @@ class object:
         'Hasta':const.MOON,
         'Chitra': const.MARS,
         'Swati': const.NORTH_NODE,
-        'Vishakha': const.JUPITER,
+        'Vishaka': const.JUPITER,
         'Anuradha': const.SATURN,
         'Jyeshta': const.MERCURY,
 

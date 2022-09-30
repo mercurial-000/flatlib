@@ -34,8 +34,6 @@ class GenericObject:
         self.lat = 0.0
         self.sign = const.ARIES
         self.signlon = 0.0
-        self.nakshatra = None
-        
         
     @classmethod
     def fromDict(cls, _dict):
@@ -49,22 +47,11 @@ class GenericObject:
         return self.fromDict(self.__dict__)
     
     def __str__(self):
-        if self.id in (const.ASC, const.DESC, const.MC, const.IC) and self.nakshatra != None:
-            return '%s: %s (%s) %s ruled by %s' % (
-                self.id,
-                self.sign,
-                angle.toString(self.signlon), 
-                self.nakshatra,
-                self.nakshatraruler
-            )
-        else:
-            return '%s: %s (%s)' % (
-                self.id,
-                self.sign,
-                angle.toString(self.signlon)
-            )
-    
-    
+        return '%s: %s (%s)>' % (
+            self.id,
+            self.sign,
+            angle.toString(self.signlon)
+        )
     
     # === Properties === #
     
@@ -91,17 +78,6 @@ class GenericObject:
         self.lon = angle.norm(lon)
         self.signlon = self.lon % 30
         self.sign = const.LIST_SIGNS[int(self.lon / 30.0)]
-
-    def relocateAngle(self, lon):
-        """ Relocates this object to a new longitude. """
-        angl=self
-        angl.lon = angle.norm(lon)
-        angl.signlon = self.lon % 30
-        angl.sign = const.LIST_SIGNS[int(self.lon / 30.0)]
-        angl.signruler=props.object.signRuler[angl.sign]
-        angl.nakshatra=const.LIST_NAKSHATRAS[int(angl.lon / 13.333333333333334)]
-        angl.nakshatraruler=props.object.nakshatraRuler[angl.nakshatra]
-        return angl
         
     def antiscia(self):
         """ Returns antiscia object. """
@@ -147,20 +123,8 @@ class Object(GenericObject):
             self.nakshatra,
             self.nakshatraruler
         )
- 
     
     # === Properties === #
-
-    #added by moi!!! :D
-    def relocateObject(self,lon):
-        obj=self
-        obj.relocate(lon)
-        obj.signruler=props.object.signRuler[obj.sign]
-        obj.nakshatra=const.LIST_NAKSHATRAS[int(obj.lon / 13.333333333333334)]
-        obj.nakshatraruler=props.object.nakshatraRuler[obj.nakshatra]
-        return obj
-
-        
     
     def orb(self):
         """ Returns the orb of this object. """
@@ -195,8 +159,8 @@ class Object(GenericObject):
         return props.object.element[self.id]
 
     
-    # === Functions === 
-
+    # === Functions === #
+    
     def isDirect(self):
         """ Returns if this object is in direct motion. """
         return self.movement() == const.DIRECT
@@ -235,15 +199,6 @@ class House(GenericObject):
         )
         
     # === Properties === #
-
-    def relocateHouse(self, lon):
-        """ Relocates this object to a new longitude. """
-        house=self
-        house.lon = angle.norm(lon)
-        #house.signlon = self.lon % 30
-        house.signlon = 0.0
-        house.sign = const.LIST_SIGNS[int(self.lon / 30.0)]
-        return house
     
     def num(self):
         """ Returns the number of this house [1..12]. """

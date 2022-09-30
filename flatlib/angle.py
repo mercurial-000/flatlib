@@ -39,6 +39,10 @@ def znorm(angle):
     angle = angle % 360
     return angle if angle <= 180 else angle - 360
 
+def rnorm(angle):
+    """ Normalizes an angle between 0 and 360 to its zodiac longitude """
+    return angle % 30
+
 def distance(angle1, angle2):
     """ Angular distance from angle1 to angle2 (ccw). """
     return norm(angle2 - angle1)

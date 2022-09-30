@@ -302,6 +302,18 @@ class object:
         'Pisces': const.JUPITER
     }
     
+    """
+    #sign rulers
+    signRuler = {
+        const.SUN: const.LEO,
+        const.MOON: const.CANCER,
+        const.MERCURY: [const.GEMINI, const.VIRGO],
+        const.VENUS: [const.TAURUS, const.LIBRA],
+        const.MARS: [const.ARIES, const.SCORPIO],
+        const.JUPITER: [const.SAGITTARIUS, const.PISCES],
+        const.SATURN: [const.CAPRICORN, const.AQUARIUS]
+    }
+    """
 
     #nakshatra ruler
     nakshatraRuler = {
@@ -321,7 +333,7 @@ class object:
         'Hasta':const.MOON,
         'Chitra': const.MARS,
         'Swati': const.NORTH_NODE,
-        'Vishakha': const.JUPITER,
+        'Vishaka': const.JUPITER,
         'Anuradha': const.SATURN,
         'Jyeshta': const.MERCURY,
 
@@ -362,21 +374,6 @@ class house:
         const.HOUSE1, const.HOUSE2, const.HOUSE3,
         const.HOUSE4, const.HOUSE5, const.HOUSE6
     ]
-
-    houseVariables = {
-        'House 1': const.HOUSE1,
-        'House 2': const.HOUSE2,
-        'House 3': const.HOUSE3,
-        'House 4': const.HOUSE4,
-        'House 5': const.HOUSE5,
-        'House 6': const.HOUSE6,
-        'House 7': const.HOUSE7,
-        'House 8': const.HOUSE8,
-        'House 9': const.HOUSE9,
-        'House 10': const.HOUSE10,
-        'House 11': const.HOUSE11,
-        'House 12': const.HOUSE12,
-    }
 
 
 # --------------------- #
